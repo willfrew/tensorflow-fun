@@ -7,20 +7,38 @@ CONTAINER_BUILD_DIR=/build
 
 IMAGE=tensorflow-fun:latest
 
-# Build
 docker build . --tag $IMAGE
 
-# Run
+function usage() {
+    echo "Usage: ./run.sh (<project> build|load) | repl"
+}
+
+function error() {
+    echo "Error:" $1
+    usage
+    exit 1
+}
+
 case "$1" in
-    "build")
-        CMD="python $CONTAINER_SRC_DIR/build.py";;
-    "load")
-        CMD="python $CONTAINER_SRC_DIR/load.py";;
     "repl")
         CMD="python";;
+    "mnist")
+        PROJ="01-mnist";;
     *)
-        CMD="python";;
+        error "Command not recognised"
 esac
+
+if [ "$PROJ" != "" ]; then
+    case "$2" in
+        "build")
+            CMD="python $CONTAINER_SRC_DIR/$PROJ/build.py";;
+        "load")
+            CMD="python $CONTAINER_SRC_DIR/$PROJ/load.py";;
+        *)
+            error "Command not recognised"
+    esac
+fi
+
 
 mkdir -p $LOCAL_BUILD_DIR
 

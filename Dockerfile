@@ -1,6 +1,7 @@
 FROM tensorflow/tensorflow:latest
 
-RUN mkdir /src /build
-WORKDIR /build
+RUN python3 -m pip install --upgrade pillow
+
+RUN mkdir /src /build /cache
 
 ADD . /src/
